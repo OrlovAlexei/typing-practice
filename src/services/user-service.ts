@@ -2,9 +2,11 @@ import { Role } from "../entities/role";
 import { Admin } from "../entities/admin";
 import { Client } from "../entities/client";
 import { Moderator } from "../entities/moderator";
-import { Operation } from "../entities/operation";
 import type { User } from "../entities/user";
 import type { RoleToUser } from "../entities/role-to-user";
+import { Password } from "../entities/password";
+import { Email } from "../entities/email";
+import { UserRoleTransformations, UserRoleTransformationsType } from "../entities/user-role-transformations";
 
 export default class UserService {
   private users: readonly User[] = [];
@@ -21,6 +23,15 @@ export default class UserService {
     return this.users;
   }
 
+  async getUserByCred(email:Email, password:Password):Promise<User |null>{
+
+    await this.getAllUsers();
+
+    const user = this.users.find(u => u.email===email && u.password === password)
+
+    return user ?? null
+  }
+
   private fetch(): Promise<any> {
     return import("../mocks/users.json");
   }
@@ -34,14 +45,8 @@ export default class UserService {
     return this.users;
   }
 
-  getAvailableOperations(user: User, currenUser: User): Operation[] {
-    // Вам нужно поменять логику внутри getAvailableOperations для того, что бы это работало с логином
-    throw new Error("Not Implemented")
-    // if (user instanceof Admin || user instanceof Client) {
-    //   return [Operation.UPDATE_TO_MODERATOR];
-    // }
-
-    // return [Operation.UPDATE_TO_CLIENT, Operation.UPDATE_TO_ADMIN];
+  getAvailableOperations<R1 extends Role, R2 extends Role>(user: User, currenUser: User): UserRoleTransformationsType[R2][R1]  {
+    return UserRoleTransformations[currenUser.role][user.role];
   }
 
   getConstructorByRole(role: Role) {
