@@ -10,7 +10,7 @@ export type Credentials = {
 };
 
 export default function useLogin(credentials: Credentials | null): User | null {
-  const { loginService } = useContext(Services);
+  const { loginService,routeAccessService} = useContext(Services);
   const { dispatch, state = { user: null } } = useContext(LogedInUser);
 
   useEffect(() => {
@@ -18,8 +18,17 @@ export default function useLogin(credentials: Credentials | null): User | null {
       return;
     }
     loginService.login(credentials.email, credentials.password)
-      .then((user: User) => dispatch!({ type: LogedInActionType.LOG_IN, payload: user }))
-      .then(() => navigate("/"))
+      .then((user: User) => {
+        dispatch!({ type: LogedInActionType.LOG_IN, payload: user })
+        return user
+      })
+      .then(user=> {
+        if(routeAccessService.hasAccessTo("dashboard",user)){
+          navigate("/")
+          return
+        }
+        navigate("/notfound")
+      })
       .catch(e => alert(e.message));
   }, [credentials, dispatch]);
 
