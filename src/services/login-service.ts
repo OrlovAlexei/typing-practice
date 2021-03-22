@@ -29,7 +29,7 @@ export default class LoginService {
   }
 
   // Try to define better types
-  public async login(email: UserLoginInput["email"], password: UserLoginInput["password"] ): Promise<User> {
+  public async login(email: Email, password: Password ): Promise<User> {
     const maybeUser = await this.userService.getUserByCred(email,password)
 
     if(!maybeUser){
