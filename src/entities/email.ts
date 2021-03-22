@@ -1,7 +1,7 @@
 export class Email{
   protected constructor(value: string) { }
 
-  static validate(input: string):boolean{
+  private static validate(input: string):boolean{
     const inputElement = document.createElement("input");
     inputElement.type = "email";
     inputElement.value = input

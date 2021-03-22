@@ -3,7 +3,7 @@ export class Password{
 
   protected constructor(value: string) { }
 
-  static validate(input: string):boolean{
+  private static validate(input: string):boolean{
     return this.VALIDATOR.test(input)
   }
 
