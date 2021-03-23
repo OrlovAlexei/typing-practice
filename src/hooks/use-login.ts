@@ -3,6 +3,7 @@ import { navigate } from "@reach/router";
 import { useContext, useEffect } from "react";
 import { LogedInActionType, LogedInUser } from "../providers/loged-in-user";
 import type { User } from "../entities/user";
+import { Page } from "../entities/page";
 
 export type Credentials = {
   email: string;
@@ -23,7 +24,7 @@ export default function useLogin(credentials: Credentials | null): User | null {
         return user
       })
       .then(user=> {
-        if(routeAccessService.hasAccessTo("dashboard",user)){
+        if(routeAccessService.hasAccessTo(Page.DASHBOARD,user)){
           navigate("/")
           return
         }
