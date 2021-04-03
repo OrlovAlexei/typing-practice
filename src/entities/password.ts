@@ -1,20 +1,21 @@
-export class Password{
-  private static VALIDATOR = /^[a-zA-Z1-9._]+@*\.com$/;
+import * as t from "runtypes"
 
-  protected constructor(value: string) { }
+const VALIDATOR = /^[a-zA-Z1-9._]+@*\.com$/;
 
-  private static validate(input: string):boolean{
-    return this.VALIDATOR.test(input)
-  }
-
-  static from(input: string): Password{
-    const valid = this.validate(input)
-
-    if(!valid){
-      throw new TypeError(`Input: ${input} cannot be converted to password`);
-    }
-
-    return new Password(input)
-  }
-
+function validate(input: string):boolean{
+  return VALIDATOR.test(input)
 }
+
+export const Password = t.String.withBrand("Password").withConstraint(input => {
+
+  const valid = validate(input)
+
+  if(!valid){
+    throw new TypeError(`Input: ${input} cannot be converted to email`);
+  }
+
+  return input
+})
+
+
+export type Password = t.Static<typeof Password>

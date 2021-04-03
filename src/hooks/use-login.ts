@@ -18,7 +18,10 @@ export default function useLogin(credentials: Credentials | null): User | null {
     if (!credentials || !dispatch) {
       return;
     }
-    loginService.login(credentials.email, credentials.password)
+
+    const {email,password} = loginService.validateUserCredentials(credentials.email, credentials.password)
+
+    loginService.login(email, password)
       .then((user: User) => {
         dispatch!({ type: LogedInActionType.LOG_IN, payload: user })
         return user

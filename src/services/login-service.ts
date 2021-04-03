@@ -2,11 +2,14 @@ import { Email } from "../entities/email";
 import { Password } from "../entities/password";
 import { User } from "../entities/user";
 import UserService from "./user-service";
+import * as t from "runtypes"
 
-type UserLoginInput = {
+const UserLoginInput = t.Record({
   email:Email,
-  password:Password
-}
+  password: Password
+})
+
+type UserLoginInput = t.Static<typeof UserLoginInput>
 
 export default class LoginService {
 
@@ -14,8 +17,8 @@ export default class LoginService {
 
   public validateUserCredentials(email: string, password: string):UserLoginInput {
     try{
-      const validEmail = Email.from(email)
-      const validPassword = Password.from(password)
+      const validEmail = Email.check(email)
+      const validPassword = Password.check(password)
 
       return {
         email:validEmail,
