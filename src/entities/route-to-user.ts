@@ -1,9 +1,9 @@
-import { Admin } from "./admin"
-import { Moderator } from "./moderator"
-import { Page } from "./page"
+import { Admin } from "./admin";
+import { Moderator } from "./moderator";
+import { Page } from "./page";
 
-const RouteToUser = {
-  [Page.DASHBOARD]: Admin.Or(Moderator).check
-}
+export const RouteToUser = {
+  [Page.DASHBOARD]: Admin.Or(Moderator).check,
+};
 
-export type RouteToUserType = typeof RouteToUser
+export type RouteToUserType = typeof RouteToUser;
